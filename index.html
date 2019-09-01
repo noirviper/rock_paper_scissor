@@ -30,7 +30,9 @@
          .content {grid-area: content;}
          .inner-content {
             display: grid;
-            grid-gap: 60px 25px;
+            grid-template-columns: 33% 33% 33%;
+            grid-template-rows: auto;
+            grid-gap: 60px 1em;
             grid-template-areas: "player . computer"
                                  "btn1 btn2 btn3";
          }
