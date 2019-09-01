@@ -33,38 +33,36 @@
                         alert("You're no fun!");
                         return null;
                     } else {
-                        result = result.toLowerCase();
-                            if (result === "rock" || result === "paper" || result === "scissors") {
-                                // Let's play
-                                return result;
-                                
-                                  
-                            } else  {
-                                alert("I think you made a mistake! Please choose: Rock, Paper, or Scissors");
-                                
-                                return playerPlay();
-                                
-                            }
+                        result = checkPlayerInput(result.toLowerCase());
+                        return result;
                     } 
                     
                     
                     
                 }
 
-                function computerPlay() {
-                    result = Math.floor(Math.random() * Math.floor(3));
+                function checkPlayerInput(input) {
+                    
+                    if (input === "rock" || input === "paper" || input === "scissors") {
+                                // Let's play
+                                return input;
+                            } else  {
+                                alert("I think you made a mistake! Please choose: Rock, Paper, or Scissors");
+                                
+                                return playerPlay();
+                                
+                            }
+                }
 
-                    if (result === 0) {
-                        return "rock";
-                    } else if (result === 1) {
-                        return "paper";
-                    } else if (result === 2) {
-                        return "scissors";
-                    }
+                function computerPlay() {
+                    result = Math.floor(Math.random() * Math.floor(choiceArray.length()));
+                    choiceArray = ["rock","paper","scissors"];
+                    
+                    return choiceArray[result];
                 }
 
                 function playRound(playerSelection, computerSelection) {
-                    // your code here!
+                    
                     if (playerSelection === null) {
                         alert("Game Over");
                     } else if (playerSelection === computerSelection) {
@@ -72,16 +70,18 @@
                         let computerSelection = computerPlay();
                         let playerSelection = playerPlay();
                         playRound(playerSelection, computerSelection);
-                    } else if ((playerSelection === "rock" && computerSelection === "scissors") || (playerSelection === "scissors" && computerSelection === "paper") || (playerSelection === "paper" && computerSelection === "rock")) {
-                        console.log(`You win! ${playerSelection} beats ${computerSelection}`);
-                        playerWins++;
-                        if (playerWins === 3) {
-                            alert(`You win! Your Score: ${playerWins} | Computer's Score: ${compWins}`);
-                        } else {
-                            let computerSelection = computerPlay();
-                            let playerSelection = playerPlay();
-                            playRound(playerSelection, computerSelection);
-                        }
+                    } else if ((playerSelection === "rock" && computerSelection === "scissors") || 
+                        (playerSelection === "scissors" && computerSelection === "paper") || 
+                        (playerSelection === "paper" && computerSelection === "rock")) {
+                            console.log(`You win! ${playerSelection} beats ${computerSelection}`);
+                            playerWins++;
+                            if (playerWins === 3) {
+                                alert(`You win! Your Score: ${playerWins} | Computer's Score: ${compWins}`);
+                            } else {
+                                let computerSelection = computerPlay();
+                                let playerSelection = playerPlay();
+                                playRound(playerSelection, computerSelection);
+                            }
                         
                     } else {
                         console.log(`You lose! ${computerSelection} beats ${playerSelection}`);
