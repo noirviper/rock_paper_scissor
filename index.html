@@ -12,96 +12,148 @@
         <link rel="stylesheet" href="">
     </head>
     <body>
+        <style>
+            *{font-size: 18px;}
+            *:focus {outline: none;}
+         body {background: rgb(6, 177, 219); color: white; text-align: center;}
+         .container {
+             display: grid;
+             width: 100%;
+             max-width: 900px;
+             margin: 0 auto;
+             grid-template-areas: "title"
+                                  "content";
+             grid-gap: 50px;
+         }
+         .title {grid-area: title;}
+         #title {font-size: 3em; padding: 10px;}
+         .content {grid-area: content;}
+         .inner-content {
+            display: grid;
+            grid-gap: 25px;
+            grid-template-areas: "player . computer"
+                                 "btn1 btn2 btn3";
+         }
+         .player-score {grid-area: player;}
+         .computer-score {grid-area: computer;}
+         #playerScore, #compScore {
+             padding: 10px;
+             border: 2px solid white;
+             max-width: 100px;
+             width: 100%;
+             margin: 0 auto;
+             font-size: 2em;
+         }
+         button {
+             cursor: pointer;
+             grid-area: btn;
+             color: white;
+             border: 2px solid white;
+             background: rgb(6, 177, 219);
+             padding: 15px;
+             width: 100%;
+             max-width: 250px;
+             margin: 0 auto;
+             border-radius: 10px;
+             transition: all 0.4s linear;
+         }
+         button:hover {box-shadow: 2px 2px 4px gray; transform: scale(1.1);}
+         #rock {grid-area: btn1;}
+         #paper {grid-area: btn2;}
+         #scissors {grid-area: btn3;}
+        </style>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         
-        <script  async defer>
-            function game() {
-                let computerSelection = computerPlay();
-                let playerSelection = playerPlay();
-                let playerWins = 0;
-                let compWins = 0;
-                
-                
+        <div class="container">
+            <div class="title"><h1 id="title">Let's Play Rock Paper Scissors!</h1></div>
+            <div class="content">
+                <div class="inner-content">
+                <div class="player-score">
+                    <h2 id="playerScore">0</h2>
+                    <h3>Player's Score</h3>
+                </div>
+                <div class="computer-score">
+                    <h2 id="compScore">0</h2>
+                    <h3>Computer's Score</h3>
+                </div>
+                <button id="rock" data-choice="rock">Rock</button>
+                <button id="paper" data-choice="paper">Paper</button>
+                <button id="scissors" data-choice="scissors">Scissors</button>
+                </div>
+            </div>
+        </div>
 
-                function playerPlay() {
-                   let result = prompt("Time to Play! Best out of 5: Rock, Paper, Scissors!");
-                    
-                    // If the player selects cancel
-                    if (result === null) {
-                        alert("You're no fun!");
-                        return null;
+        <script>
+            const buttons = document.querySelectorAll('button');
+            const playerScoreContainer = document.getElementById('playerScore');
+            const computerScoreContainer = document.getElementById('compScore');
+            const titleContainer = document.getElementById('title');
+            let playerWins = 0;
+            let compWins = 0;
+
+            buttons.forEach((button) => {
+                button.addEventListener('click', (e) => {
+                    if(playerWins + compWins != 5){
+                        input = button.id;
+                        //console.log("Clicked "+input);
+                        game(input);
                     } else {
-                        result = checkPlayerInput(result.toLowerCase());
-                        return result;
-                    } 
-                    
-                    
-                    
-                }
+                        return;
+                    }
+                });
+            });
+            
 
-                function checkPlayerInput(input) {
-                    
-                    if (input === "rock" || input === "paper" || input === "scissors") {
-                                // Let's play
-                                return input;
-                            } else  {
-                                alert("I think you made a mistake! Please choose: Rock, Paper, or Scissors");
-                                
-                                return playerPlay();
-                                
-                            }
-                }
-
+            function game(input) {
+                let computerSelection = computerPlay();
+                let playerSelection = input;
+                
+                
+                
+                
                 function computerPlay() {
-                    result = Math.floor(Math.random() * Math.floor(choiceArray.length()));
-                    choiceArray = ["rock","paper","scissors"];
-                    
+                    let choiceArray = ["rock","paper","scissors"];
+                    result = Math.floor(Math.random() * Math.floor(choiceArray.length));
                     return choiceArray[result];
                 }
 
                 function playRound(playerSelection, computerSelection) {
                     
-                    if (playerSelection === null) {
-                        alert("Game Over");
-                    } else if (playerSelection === computerSelection) {
-                        console.log("It's a tie! Try again!");
-                        let computerSelection = computerPlay();
-                        let playerSelection = playerPlay();
-                        playRound(playerSelection, computerSelection);
+                     if (playerSelection === computerSelection) {
+                        alert("It's a tie! Try again!");
+                        /* let computerSelection = computerPlay();
+                        let playerSelection = playerPlay(); 
+                        playRound(playerSelection, computerSelection); */
                     } else if ((playerSelection === "rock" && computerSelection === "scissors") || 
                         (playerSelection === "scissors" && computerSelection === "paper") || 
                         (playerSelection === "paper" && computerSelection === "rock")) {
-                            console.log(`You win! ${playerSelection} beats ${computerSelection}`);
+                            alert(`You win! ${playerSelection} beats ${computerSelection}`);
                             playerWins++;
+                            playerScoreContainer.textContent = playerWins.toString();
+
                             if (playerWins === 3) {
-                                alert(`You win! Your Score: ${playerWins} | Computer's Score: ${compWins}`);
-                            } else {
-                                let computerSelection = computerPlay();
-                                let playerSelection = playerPlay();
-                                playRound(playerSelection, computerSelection);
+                                titleContainer.textContent ="You win!";
+                                titleContainer.style.cssText += "border: 2px solid green; box-shadow: 0 0 10px green; max-width:max-content; margin:0.67em auto;"
                             }
                         
                     } else {
-                        console.log(`You lose! ${computerSelection} beats ${playerSelection}`);
-                        compWins++;
-
+                        alert(`You lose! ${computerSelection} beats ${playerSelection}`);
+                            compWins++;
+                            computerScoreContainer.textContent = compWins.toString();
                         if (compWins === 3) {
-                            alert(`You lose! Your Score: ${playerWins} | Computer's Score: ${compWins}`);
-                        } else {
-                            let computerSelection = computerPlay();
-                            let playerSelection = playerPlay();
-                            playRound(playerSelection, computerSelection);
-                        }
+                            titleContainer.textContent = "You lose!";
+                            titleContainer.style.cssText += "border: 2px solid red; box-shadow: 0 0 10px red; max-width:max-content; margin: 0.67em auto;"
+                        } 
                     }
 
 
                 }
-                
                 playRound(playerSelection, computerSelection);
+                
             }
-            game();
+            
         </script>
     </body>
 </html>

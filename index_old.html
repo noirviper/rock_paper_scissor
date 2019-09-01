@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <script  async defer>
+            function game() {
+                let computerSelection = computerPlay();
+                let playerSelection = playerPlay();
+                let playerWins = 0;
+                let compWins = 0;
+                
+                
+
+                function playerPlay() {
+                   let result = prompt("Time to Play! Best out of 5: Rock, Paper, Scissors!");
+                    
+                    // If the player selects cancel
+                    if (result === null) {
+                        alert("You're no fun!");
+                        return null;
+                    } else {
+                        result = checkPlayerInput(result.toLowerCase());
+                        return result;
+                    } 
+                    
+                    
+                    
+                }
+
+                function checkPlayerInput(input) {
+                    
+                    if (input === "rock" || input === "paper" || input === "scissors") {
+                                // Let's play
+                                return input;
+                            } else  {
+                                alert("I think you made a mistake! Please choose: Rock, Paper, or Scissors");
+                                
+                                return playerPlay();
+                                
+                            }
+                }
+
+                function computerPlay() {
+                    result = Math.floor(Math.random() * Math.floor(choiceArray.length()));
+                    choiceArray = ["rock","paper","scissors"];
+                    
+                    return choiceArray[result];
+                }
+
+                function playRound(playerSelection, computerSelection) {
+                    
+                    if (playerSelection === null) {
+                        alert("Game Over");
+                    } else if (playerSelection === computerSelection) {
+                        console.log("It's a tie! Try again!");
+                        let computerSelection = computerPlay();
+                        let playerSelection = playerPlay();
+                        playRound(playerSelection, computerSelection);
+                    } else if ((playerSelection === "rock" && computerSelection === "scissors") || 
+                        (playerSelection === "scissors" && computerSelection === "paper") || 
+                        (playerSelection === "paper" && computerSelection === "rock")) {
+                            console.log(`You win! ${playerSelection} beats ${computerSelection}`);
+                            playerWins++;
+                            if (playerWins === 3) {
+                                alert(`You win! Your Score: ${playerWins} | Computer's Score: ${compWins}`);
+                            } else {
+                                let computerSelection = computerPlay();
+                                let playerSelection = playerPlay();
+                                playRound(playerSelection, computerSelection);
+                            }
+                        
+                    } else {
+                        console.log(`You lose! ${computerSelection} beats ${playerSelection}`);
+                        compWins++;
+
+                        if (compWins === 3) {
+                            alert(`You lose! Your Score: ${playerWins} | Computer's Score: ${compWins}`);
+                        } else {
+                            let computerSelection = computerPlay();
+                            let playerSelection = playerPlay();
+                            playRound(playerSelection, computerSelection);
+                        }
+                    }
+
+
+                }
+                
+                playRound(playerSelection, computerSelection);
+            }
+            game();
+        </script>
+    </body>
+</html>
